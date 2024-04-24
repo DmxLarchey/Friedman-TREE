@@ -21,9 +21,21 @@ Inductive vec : Type → nat → Type.
 
 ## The Friedman `tree(n)` function
 
+The Friedman `tree(n)` function is [informally defined](https://en.wikipedia.org/wiki/Kruskal%27s_tree_theorem)
+as the largest natural number `m` for which there is a sequence `[t₁;...;tₘ]` of length `m` of undecorated
+rose trees such that:
+1. the number of nodes of those trees are `1+n,...,m+n` respectivelly; 
+2. the sequence is bad for the homeomorphic embedding.
+
+Formally in Coq, this gives the following specification:
 ```coq
 
 Inductive rtree : Type :=  ⟨ _ ⟩ᵣ : list rtree → rtree.
+
+Inductive rtree_homeo_embed : rtree → rtree → Prop :=
+  | rtree_homeo_embed_subt s t l : t ∈ l → s ≤ₕ t → s ≤ₕ ⟨l⟩ᵣ
+  | rtree_homeo_embed_root l m : list_embed rtree_homeo_embed l m → ⟨l⟩ᵣ ≤ₕ ⟨m⟩ᵣ
+where "s ≤ₕ t" := (rtree_homeo_embed s t).
 
 Definition rtree_size : rtree → nat.
 Notation "⌊ t ⌋ᵣ" := (rtree_size t).
@@ -38,3 +50,5 @@ Theorem Friedman_tree_spec n :
         (∀ i : idx m, ⌊tᵢ⌋ᵣ = 1+i+n)
        ∧ ∀ i j : idx m, i < j → ¬ tᵢ ≤ₕ tⱼ.
 ```
+
+## The Friedman `TREE(n)` function
