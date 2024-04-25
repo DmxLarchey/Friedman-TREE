@@ -48,7 +48,7 @@ Theorem Friedman_tree_spec n :
    ↔ ∃ t : vec rtree m, (∀i, ⌊tᵢ⌋ᵣ = 1+i+n) ∧ (∀ i j, i < j → ¬ tᵢ ≤ₕ tⱼ).
 ```
 
-The essential tool to built value `Friedman_tree n` is to show that there is a value `m` such that any sequence
+The essential tool to built value `Friedman_tree n` is to show that there is a length `m` such that any sequence
 of trees `[t₁;...;tₘ]` of increasing sizes (as specified above) is good for the homeomorphic embedding `≤ₕ`:
 - first, using Kruskal's theorem in its (equivalent) formulation using inductive bars, any (ever expending)
   sequence of trees is bound to become `≤ₕ`-good;
