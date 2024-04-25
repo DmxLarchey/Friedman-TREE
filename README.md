@@ -62,4 +62,8 @@ of trees `[t₁;...;tₘ]` of increasing sizes (as specified above) is good for 
 Since, the spec of `Friedman_tree n` is decidable, anti-monotonic and bounded by the above `m`, 
 the value `Friedman_tree n` can be computed by linear search using a variant of Constructive Epsilon.
 
+Notice that our implementation is _axiom free_, hence purely constructive . Compared to the argument developed in [Wikipedia](https://en.wikipedia.org/wiki/Kruskal%27s_tree_theorem), we here use a _constructive version of Kruskal's theorem_ from [`Kruskal-Theorems`](https://github.com/DmxLarchey/Kruskal-Theorems), and we replace _Koenig's lemma_ with the FAN theorem for inductive bars as established constructivelly also in [`Kruskal-Higman`](https://github.com/DmxLarchey/Kruskal-Higman).
+
 ## The Friedman `TREE(n)` function
+
+The construction is similar to the previous one but operates on rose trees decorated with the finite type `[1,...,n]` where `n` is the parameter of `Friedman_TREE n`.
