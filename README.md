@@ -22,8 +22,8 @@ Inductive vec : Type → nat → Type.
 ## The Friedman `tree(n)` function
 
 The Friedman `tree(n)` function is [informally defined](https://en.wikipedia.org/wiki/Kruskal%27s_tree_theorem)
-as the largest natural number `m` for which there is a sequence `[t₁;...;tₘ]` of length `m` of undecorated
-rose trees such that:
+as the largest natural number `m` for which there is a sequence of length `m` of undecorated
+rose trees `[t₁;...;tₘ]` such that:
 1. the number of nodes of those trees are `1+n,...,m+n` respectivelly; 
 2. the sequence is bad for the homeomorphic embedding.
 
@@ -46,9 +46,7 @@ Definition Friedman_tree : nat → nat.
 
 Theorem Friedman_tree_spec n :
  ∀m, m ≤ Friedman_tree n
-   ↔ ∃ t : vec rtree m,
-        (∀ i : idx m, ⌊tᵢ⌋ᵣ = 1+i+n)
-       ∧ ∀ i j : idx m, i < j → ¬ tᵢ ≤ₕ tⱼ.
+   ↔ ∃ t : vec rtree m, (∀i, ⌊tᵢ⌋ᵣ = 1+i+n) ∧ (∀ i j, i < j → ¬ tᵢ ≤ₕ tⱼ).
 ```
 
 ## The Friedman `TREE(n)` function
