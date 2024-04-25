@@ -48,7 +48,7 @@ Theorem Friedman_tree_spec n :
    ↔ ∃ t : vec rtree m, (∀i, ⌊tᵢ⌋ᵣ = 1+i+n) ∧ (∀ i j, i < j → ¬ tᵢ ≤ₕ tⱼ).
 ```
 
-The essential tool to built value `Friedman_tree n` is to show that there is a length `m` such that any sequence
+The essential argument to built the value `Friedman_tree n` is to show that there is a length `m` such that any sequence
 of trees `[t₁;...;tₘ]` of increasing sizes (as specified above) is good for the homeomorphic embedding `≤ₕ`:
 - first, using Kruskal's theorem in its (equivalent) formulation using inductive bars, any (ever expending)
   sequence of trees is bound to become `≤ₕ`-good;
@@ -59,10 +59,10 @@ of trees `[t₁;...;tₘ]` of increasing sizes (as specified above) is good for 
   become `≤ₕ`-good _uniformly_, ie all simultaneously;
 - the point `m` where all the size increasing sequences of length `m` become `≤ₕ`-good is the needed value.
  
-Since, the spec of `Friedman_tree n` is decidable, anti-monotonic and bounded by the above `m`, 
+Since, the spec of `Friedman_tree n` is decidable, anti-monotonic and bounded (by the above `m`), 
 the value `Friedman_tree n` can be computed by linear search using a variant of Constructive Epsilon.
 
-Notice that our implementation is _axiom free_, hence purely constructive . Compared to the argument developed in [Wikipedia](https://en.wikipedia.org/wiki/Kruskal%27s_tree_theorem), we here use a _constructive version of Kruskal's theorem_ from [`Kruskal-Theorems`](https://github.com/DmxLarchey/Kruskal-Theorems), and we replace _Koenig's lemma_ with the FAN theorem for inductive bars as established constructivelly also in [`Kruskal-Higman`](https://github.com/DmxLarchey/Kruskal-Higman).
+Notice that our implementation is _axiom free_, hence purely constructive. Compared to the argument developed in [Wikipedia](https://en.wikipedia.org/wiki/Kruskal%27s_tree_theorem), we here use a _constructive version of Kruskal's theorem_ from [`Kruskal-Theorems`](https://github.com/DmxLarchey/Kruskal-Theorems), and we replace _Koenig's lemma_ with the FAN theorem for inductive bars as established constructivelly also in [`Kruskal-Higman`](https://github.com/DmxLarchey/Kruskal-Higman).
 
 ## The Friedman `TREE(n)` function
 
