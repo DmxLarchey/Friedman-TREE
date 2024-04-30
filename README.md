@@ -1,5 +1,8 @@
 # Friedman-TREE
 
+In this small project, depending on [`Coq-Kruskal`](https://github.com/DmxLarchey/Coq-Kruskal) in an essential way,
+we build [Harvey Friedman](https://en.wikipedia.org/wiki/Harvey_Friedman)'s `tree(n)` and `TREE(n)` fast growing functions.
+
 ## Reminders:
 
 ```coq
@@ -27,7 +30,7 @@ rose trees `[t₁;...;tₘ]` such that:
 1. the number of nodes of those trees are `1+n,...,m+n` respectivelly; 
 2. the sequence is bad for the homeomorphic embedding `≤ₕ`.
 
-Formally in Coq, this gives the following specification:
+Formally in Coq, this gives the following specification and the theorem `Friedman_tree_spec` established in [`tree.v`](theories/tree.v):
 ```coq
 Inductive rtree : Type :=  ⟨ _ ⟩ᵣ : list rtree → rtree.
 
@@ -66,4 +69,22 @@ Notice that our implementation is _axiom free_, hence purely constructive. Compa
 
 ## The Friedman `TREE(n)` function
 
-The construction is similar to the previous one but operates on rose trees decorated with the finite type `[1,...,n]` where `n` is the parameter of `Friedman_TREE n`.
+The Friedman `TREE(n)` function is [insanely fast growing function](https://en.wikipedia.org/wiki/Kruskal%27s_tree_theorem) of which the termination proof depends on the proof of Kruskal's tree theorem itself. The construction we perfom in Coq is similar to the previous one but operates on rose trees decorated with the finite type `idx n ≃ [1,...,n]` where `n` is the parameter of `Friedman_TREE n`. The construction of `Friedman_TREE` and the theorem `Friedman_TREE_spec` are performed in [`TREE.v`](theories/TREE.v):
+
+```coq
+Definition ntree (n : nat) := ltree (idx n).
+Notation "⟨i|l⟩ₗ" := (ltree_node i l).
+
+Definition ntree_size {n} : ntree n → nat := @ltree_size _.
+Notation "⌊ t ⌋ₙ" := (ntree_size t).
+Fact ntree_size_fix i l : ⌊⟨i,l⟩ₗ⌋ₙ = 1 + list_sum ntree_size l.
+
+Definition ntree_embed {n} : rel₂ (ntree n) := ltree_homeo_embed (@eq _).
+Notation "l ≤ₕ m" := (ntree_homeo_embed l m).
+
+Definition Friedman_TREE : nat → nat.
+
+Theorem Friedman_TREE_spec n :
+ ∀m, m ≤ Friedman_TREE n
+   ↔ ∃ t : vec (ntree n) m, (∀i, ⌊tᵢ⌋ₙ ≤ 1+i) ∧ (∀ i j, i < j → ¬ tᵢ ≤ₕ tⱼ).
+```
