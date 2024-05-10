@@ -1,3 +1,13 @@
+```
+(**************************************************************)
+(*   Copyright Dominique Larchey-Wendling [*]                 *)
+(*                                                            *)
+(*                             [*] Affiliation LORIA -- CNRS  *)
+(**************************************************************)
+(*      This file is distributed under the terms of the       *)
+(*        Mozilla Public License Version 2.0, MPL-2.0         *)
+(**************************************************************)
+```
 # Friedman-TREE
 
 In this small project, depending on [`Coq-Kruskal`](https://github.com/DmxLarchey/Coq-Kruskal) in an essential way,
