@@ -57,15 +57,13 @@ Section Friedman_tree.
 
     (** We show the existence of a bound on m such that tree_n_spec m *)
 
-    Hint Resolve af_rtree_homeo_embed : core.
-
     (** We combine with the FAN theorem *)
 
     Local Lemma good_uniform_over_fans : bar (λ lc, FAN lc ⊆₁ good rtree_homeo_embed) [].
     Proof.
       apply FAN_theorem.
       + now constructor 2.
-      + apply af_iff_bar_good; auto.
+      + apply af_iff_bar_good, af_rtree_homeo_embed.
     Qed.
 
     (** We build tree_n_size as a FAN, which will thus be good above some m *)
