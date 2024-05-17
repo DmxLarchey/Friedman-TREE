@@ -43,11 +43,33 @@ Proof.
    + subst; auto.
 Qed.
 
-Section choice_list_pfx.
+Section pfx.
+
+  Variables (X : Type).
+  
+  Implicit Types (f : nat → X).
+
+  Local Fixpoint pfx f n :=
+    match n with
+    | 0   => []
+    | S n => f 0 :: pfx (λ n, f (S n)) n
+    end.
+
+  Local Fact pfx_rev_eq_pfx f n : pfx_rev f n = rev (pfx f n).
+  Proof.
+    induction n in f |- *; auto.
+    rewrite pfx_rev_S; simpl; f_equal; auto.
+  Qed.
+
+End pfx.
+
+#[local] Notation FAN lc := (λ c, Forall2 (λ x l, x ∈ l) c lc).
+
+Section choice_vec_list.
 
   Variable X : Type.
   
-  Implicit Types (P : nat → rel₁ X) (f : nat → X).
+  Implicit Types (P : nat → rel₁ X) (f : nat → list X).
 
   Local Definition choice_vec P n (v : vec X n) := ∀i, P (idx2nat i) v⦃i⦄.
 
@@ -69,61 +91,55 @@ Section choice_list_pfx.
       * intros [ H1 H2 ] i; idx invert i; auto.
   Qed.
 
-  Local Fixpoint pfx f n :=
-    match n with
-    | 0   => []
-    | S n => f 0 :: pfx (λ n, f (S n)) n
-    end.
-
-  Local Fact pfx_rev_eq_pfx f n : pfx_rev f n = rev (pfx f n).
+  Local Fact choice_list_FAN_pfx P f l :
+        (∀ n x, P n x ↔ x ∈ f n)
+      → choice_list P l ↔ FAN (pfx f ⌊l⌋) l.
   Proof.
-    induction n in f |- *; auto.
-    rewrite pfx_rev_S; simpl; f_equal; auto.
+    induction l as [ | x l IHl ] in P, f |- *; intros Hf; simpl.
+    + split; auto.
+    + rewrite Hf, IHl; eauto.
+      2: intros ? ?; apply Hf.
+      now rewrite Forall2_cons_inv.
   Qed.
 
-End choice_list_pfx.
-
-#[local] Notation FAN lc := (λ c, Forall2 (λ x l, x ∈ l) c lc).
-
-#[local] Fact choice_list_FAN_pfx X P (f : nat → list X) l :
-     (∀ n x, P n x ↔ x ∈ f n)
-   → choice_list P l ↔ FAN (pfx f ⌊l⌋) l.
-Proof.
-  induction l as [ | x l IHl ] in P, f |- *; intros Hf; simpl.
-  + split; auto.
-  + rewrite Hf, IHl; eauto.
-    2: intros ? ?; apply Hf.
-    now rewrite Forall2_cons_inv.
-Qed.
+End choice_vec_list.
 
 Section af_konig.
 
-  Variable (X : Type) (R : rel₂ X) (HR : af R)
-           (P : nat → rel₁ X) (HP : ∀n, fin (P n)).
+  (** A constructive form of König's lemma based on 
+     almost full relations. *)
 
-  Local Lemma good_uniform_over_any_FAN : bar (λ lc, FAN lc ⊆₁ good R) [].
+  Variables (X : Type) (R : rel₂ X) (P : nat → rel₁ X)
+            (HR : af R) (HP : ∀n, fin (P n)).
+
+  (* This instance of the FAN theorem for good R *)
+
+  Local Lemma bar_good_FAN : bar (λ lc, FAN lc ⊆₁ good R) [].
   Proof.
     apply FAN_theorem.
     + now constructor 2.
     + apply af_iff_bar_good, HR.
   Qed.
 
-  (** P is the FAN of some function f : nat → list X *)
+  (* P is the FAN of some function f : nat → list X *)
 
   Let f n := proj1_sig (HP n).
 
   Local Fact Hf n x : P n x ↔ x ∈ f n.
   Proof. apply (proj2_sig (HP _)). Qed.
 
+  (* We apply bar recursion *)
+
+  Local Lemma good_uniform_over_FAN : ∃ₜ m, FAN (pfx_rev f m) ⊆₁ good R.
+  Proof. apply bar_pfx_rev with (1 := bar_good_FAN). Qed.
+
   Theorem af_konig : ∃ₜ m, ∀v : vec X m, (∀i, P (idx2nat i) v⦃i⦄) → ∃ i j, idx2nat i < idx2nat j ∧ R v⦃i⦄ v⦃j⦄.
   Proof.
-    (** This is bar recursion. *)
-    destruct (bar_pfx_rev f good_uniform_over_any_FAN) as (m & Hm).
-    exists m.
-    intros v Hv. 
+    destruct good_uniform_over_FAN as (m & Hm).
+    exists m; intros v Hv.
     apply good_rev_vec_list, Hm.
-    rewrite pfx_rev_eq_pfx, Forall2_rev.
     apply choice_vec_list, choice_list_FAN_pfx with (1 := Hf) in Hv.
+    rewrite pfx_rev_eq_pfx, Forall2_rev.
     now rewrite vec_list_length in Hv.
   Qed.
 
