@@ -19,10 +19,7 @@ From KruskalFinite
 From KruskalAfProp
   Require Import base notations almost_full.
 
-From KruskalHigmanProp
-  Require Import tactics fan vec_embed.
-
-Require Import epsilon_max pfx_utils rtree_embed.
+Require Import epsilon_max rtree_embed af_konig.
 
 Import ListNotations idx_notations vec_notations rtree_notations.
 
@@ -53,64 +50,26 @@ Section Friedman_tree.
 
   Let tree_n_spec m := ∃t : vec rtree m, tree_n_size t ∧ tree_n_bad t.
 
-  Section tree_n_spec_fails.
+  (** We apply a constructive form of König's lemma for an AF relation.
+      For a given finitary FAN, there is a length m such that every
+      choice sequence over this FAN contains a good pair *)
 
-    (** We show the existence of a bound on m such that tree_n_spec m *)
-
-    (** We combine with the FAN theorem *)
-
-    Local Lemma good_uniform_over_fans : bar (λ lc, FAN lc ⊆₁ good rtree_homeo_embed) [].
+  Local Theorem tree_n_size_good : ∃ₜ m, ∀t : vec rtree m, tree_n_size t → ∃ i j, idx2nat i < idx2nat j ∧ t⦃i⦄ ≤ₕ t⦃j⦄.
     Proof.
-      apply FAN_theorem.
-      + now constructor 2.
-      + apply af_iff_bar_good, af_rtree_homeo_embed.
-    Qed.
-
-    (** We build tree_n_size as a FAN, which will thus be good above some m *)
-
-    (* trees k is the list of trees of size 1+k+n 
-       Hence FAN (pfx_rev trees m) = FAN [trees (m-1);...;trees 0]
-       collects all the possible reverse sequences st tree_cond *)
-    Let trees k := proj1_sig (fin_rtree_size_eq (1+k+n)).
-
-    Local Fact trees_spec k t : ⌊t⌋ᵣ = 1+k+n ↔ t ∈ trees k.
-    Proof. apply (proj2_sig (fin_rtree_size_eq _)). Qed.
-
-    Local Fact tree_n_size_iff_FAN m (t : vec _ m) :
-       tree_n_size t ↔ FAN (pfx_rev trees m) (rev (vec_list t)).
-    Proof.
-      rewrite <- Forall2_rev, rev_involutive,
-              rev_pfx_rev_vec_list_eq, Forall2_iff_vec_fall2.
-      apply forall_equiv; intros i.
-      rewrite vec_prj_set, <- trees_spec; tauto.
-    Qed.
-
-    (** By the FAN theorem, FAN is uniformly good at some point *)
-
-    Local Lemma FAN_is_good : ∃ₜ m, FAN (pfx_rev trees m) ⊆₁ good rtree_homeo_embed.
-    Proof. apply (bar_pfx_rev trees good_uniform_over_fans). Qed.
-
-    (** Hence, at this same value m, any sequence satisfying tree_cond m is good *)
-
-    Local Theorem tree_n_size_good : ∃ₜ m, ∀t : vec rtree m, tree_n_size t → ∃ i j, idx2nat i < idx2nat j ∧ t⦃i⦄ ≤ₕ t⦃j⦄.
-    Proof.
-      destruct FAN_is_good as (m & Hm).
-      exists m; intros v.
-      rewrite tree_n_size_iff_FAN.
-      now intros H%Hm%good_rev_vec_list.
+      apply af_konig with (P := fun k t => ⌊t⌋ᵣ = 1+k+n).
+      + apply af_rtree_homeo_embed.
+      + intro; apply fin_rtree_size_eq.
     Qed.
 
    (* The above m does not satisfy tree_n_spec m *)
 
-    Local Corollary tree_n_spec_fails : ∃m, ¬ tree_n_spec m.
-    Proof.
-      destruct tree_n_size_good as (m & Hm).
-      exists m; intros (v & H1 & H2).
-      apply Hm in H1 as (p & q & H3 & H4).
-      apply (H2 p q); auto.
-    Qed.
-
-  End tree_n_spec_fails.
+  Local Corollary tree_n_spec_fails : ∃ₜ m, ¬ tree_n_spec m.
+  Proof.
+    destruct tree_n_size_good as (m & Hm).
+    exists m; intros (v & H1 & H2).
+    apply Hm in H1 as (p & q & H3 & H4).
+    apply (H2 p q); auto.
+  Qed.
 
   Hint Resolve lt_dec
                rtree_homeo_embed_dec
