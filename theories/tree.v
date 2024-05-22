@@ -19,7 +19,10 @@ From KruskalFinite
 From KruskalAfProp
   Require Import base notations almost_full.
 
-Require Import epsilon_max rtree_embed af_konig.
+From KruskalFanProp
+  Require Import af_konig.
+
+Require Import epsilon_max rtree_embed.
 
 Import ListNotations idx_notations vec_notations rtree_notations.
 

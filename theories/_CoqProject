@@ -1,7 +1,6 @@
 -R . FriedmanTREE
 
 epsilon_max.v
-af_konig.v
 rtree_embed.v
 ntree_embed.v
 tree.v
