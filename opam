@@ -24,6 +24,7 @@ install: [
 ]
 
 depends: [
+  "coq-kruskal-fan"      {>= "1.0"}
   "coq-kruskal-theorems" {>= "1.0"}
 ]
 
