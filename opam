@@ -24,7 +24,10 @@ install: [
 ]
 
 depends: [
-  "coq-kruskal-fan"      {>= "1.0"}
-  "coq-kruskal-theorems" {>= "1.0"}
+  "coq-kruskal-trees"
+  "coq-kruskal-finite"
+  "coq-kruskal-almostfull"
+  "coq-kruskal-fan"
+  "coq-kruskal-theorems"
 ]
 
