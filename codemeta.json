@@ -19,7 +19,7 @@
     "dateModified": "2024-11-25",
     "datePublished": "2024-05-10",
     "description": "In this small project, depending on Kruskal-[AlmostFull,Fan,Theorems] in an essential way, we build Harvey Friedman's tree(n) and TREE(n) fast growing functions.",
-    "downloadUrl": "https://github.com/DmxLarchey/Kruskal-Theorems/archive/refs/tags/1.2.tar.gz",
+    "downloadUrl": "https://github.com/DmxLarchey/Friedman-TREE/archive/refs/tags/1.2.tar.gz",
     "funder": {
         "type": "Organization",
         "name": "CNRS"
