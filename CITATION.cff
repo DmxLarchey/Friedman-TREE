@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Larchey-Wendling
+    given-names: Dominique
+    orcid: https://orcid.org/0000-0001-9860-7203
+title: "The Friedman-TREE project"
+version: 1.2
+date-released: 2024-11-25
+url: https://github.com/DmxLarchey/Friedman-TREE
+
