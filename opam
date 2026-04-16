@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "Coq-Friedman-TREE"
-version: "1.1"
+version: "2.0"
 synopsis: "Implementation of Friedman's TREE function based on Kruskal's theorem"
 description: """
    Friedman's TREE function is an extremely fast growing function that
@@ -24,6 +24,8 @@ install: [
 ]
 
 depends: [
+  "rocq-core" { >= "9.2" & < "9.3~"}
+  "rocq-stdlib"
   "coq-kruskal-trees"
   "coq-kruskal-finite"
   "coq-kruskal-almostfull"

@@ -7,7 +7,7 @@
 (*        Mozilla Public License Version 2.0, MPL-2.0         *)
 (**************************************************************)
 
-From Coq
+From Stdlib
   Require Import List Arith Lia Utf8.
 
 From KruskalTrees
@@ -29,7 +29,7 @@ Import ListNotations idx_notations vec_notations rtree_notations.
 Set Implicit Arguments.
 
 #[local] Notation "l ≤ₕ m" := (rtree_homeo_embed l m) (at level 70, no associativity, format "l  ≤ₕ  m").
-#[local] Notation FAN lc := (λ c, Forall2 (λ x l, x ∈ l) c lc).
+#[local] Abbreviation FAN lc := (λ c, Forall2 (λ x l, x ∈ l) c lc).
 
 Section Friedman_tree.
 

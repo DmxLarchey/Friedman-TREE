@@ -7,7 +7,7 @@
 (*        Mozilla Public License Version 2.0, MPL-2.0         *)
 (**************************************************************)
 
-From Coq
+From Stdlib
   Require Import Arith List Lia Utf8.
 
 From KruskalTrees
@@ -70,6 +70,8 @@ Section rtree_homeo_embed_ind.
   Qed.
 
 End rtree_homeo_embed_ind.
+
+#[global] Register Scheme rtree_homeo_embed_ind as ind_nodep for rtree_homeo_embed.
 
 (* We deduce and right inversion lemma for s ≤ₕ ⟨l⟩ᵣ *)
 Fact rtree_homeo_embed_inv_right s t :
